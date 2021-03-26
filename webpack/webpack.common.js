@@ -81,7 +81,9 @@ module.exports = {
       objects:    `${SRC}/src/objects`,
       renderers:  `${SRC}/src/renderers`,
       scenes:     `${SRC}/src/scenes`,
-      textures:   `${SRC}/src/textures`
+      textures:   `${SRC}/src/textures`,
+
+      build:      `${SRC}/build`
     }
   },
   plugins: [
