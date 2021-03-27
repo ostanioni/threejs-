@@ -6,9 +6,13 @@ import {
     WebGLRenderer,
     BoxGeometry,
     MeshBasicMaterial,
-    Mesh
+    Mesh,
+    Vector3,
+    ArrowHelper
 
 } from 'build/three.module'
+
+// import {ArrowHelper} from 'helpers/ArrowHelper'
 // import {OrbitControls} from 'jsm/controls/OrbitControls';
 import { fromEvent } from 'rxjs'
 // import {WEBGL} from 'webgl.js'
@@ -42,7 +46,7 @@ fromEvent(window, 'resize').subscribe(() => {
     renderer.setSize(viewPort.width, viewPort.height)
     camera.aspect = viewPort.aspect
 })
-fromEvent(window, 'keyup').subscribe((e) => {
+fromEvent(window, 'keypress').subscribe((e) => {
     switch(e.code.toString()){
         case 'KeyW': camera.position.z -=0.5; log('up');log(camera.position.z); break;
         case 'KeyS': camera.position.z +=0.5;  log('down'); break;
@@ -65,6 +69,7 @@ class Basic {
         Lab.mountRenderer()
         // controls = new OrbitControls( camera, renderer.domElement )
         // controls.update()
+        Lab.addArrows()
         
         animate = function() {        
             requestAnimationFrame( animate )
@@ -101,6 +106,8 @@ class Basic {
     addCamera() {
         camera = new PerspectiveCamera( 45, viewPort.aspect, 1, 1000 )
         camera.position.z = 5
+        camera.position.y = 2
+        camera.position.x = 3
         // camera.position.set( cameraPosition.x, cameraPosition.y, cameraPosition.z )
         // camera.position = cameraPosition
         scene.add(camera)
@@ -126,6 +133,26 @@ class Basic {
     addControls() {
         const controls = new OrbitControls( camera, renderer.domElement )
         controls.update()
+    }
+    addArrows() {
+        const origin = new Vector3( 0, 0, 0 )
+        const length = 10
+
+        const dirX = new Vector3( 10, 0, 0 )
+        const red = 0xff0000
+        const arrowHelperX = new ArrowHelper( dirX, origin, length, red )
+        scene.add( arrowHelperX )
+
+        const dirY = new Vector3( 0, 10, 0 )
+        const green = 0x00ff00
+        const arrowHelperY = new ArrowHelper( dirY, origin, length, green )
+        scene.add( arrowHelperY )
+        
+        
+        const dirZ = new Vector3( 0, 0, 10 )
+        const blue = 0x0000ff
+        const arrowHelperZ = new ArrowHelper( dirZ, origin, length, blue )
+        scene.add( arrowHelperZ )
     }
 }
 export {Basic}
