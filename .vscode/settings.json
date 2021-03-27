@@ -30,7 +30,7 @@
     // "source.fixAll.eslint": true,
     // "source.fixAll.stylelint": false
   },
-  "editor.tabSize": 2,
+  "editor.tabSize": 4,
   "editor.formatOnSave": false,
   // "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",

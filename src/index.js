@@ -1,8 +1,14 @@
-import * as THREE from './build/three.module.js';
-import {OrbitControls} from './jsm/controls/OrbitControls';
+// import * as THREE from './build/three.module.js';
+// import {OrbitControls} from './jsm/controls/OrbitControls';
 // import {WEBGL} from 'webgl.js';
+import {Basic} from 'components/Basic'
+import 'css/main.css'
 
+const Env = new Basic()
+console.log(Env)
+// Env.animate()
 
+/*
 const scene = new THREE.Scene();
 
 const axesHelper = new THREE.AxesHelper( 10 );
@@ -47,3 +53,4 @@ function animate() {
     renderer.render( scene, camera );
 }
 animate();
+*/
