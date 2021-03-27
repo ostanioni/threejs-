@@ -47,8 +47,12 @@ const viewPort = {
 
 
 fromEvent(window, 'resize').subscribe(() => {
-    renderer.setSize(viewPort.width, viewPort.height)
-    camera.aspect = viewPort.aspect
+    camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+    // renderer.setSize(viewPort.width, viewPort.height)
+    // camera.aspect = viewPort.aspect
 })
 fromEvent(window, 'keypress').subscribe((e) => {
     switch(e.code.toString()){
@@ -137,7 +141,10 @@ class Basic {
     }
     mountRenderer() {
         const cnvs = document.getElementById('f380-sgji-38fx')
-        renderer = new WebGLRenderer({canvas: cnvs})
+        renderer = new WebGLRenderer({
+            canvas: cnvs,
+            antialias: true
+        })
         renderer.setSize(viewPort.width, viewPort.height)
     }
     
