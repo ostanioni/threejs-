@@ -1,4 +1,4 @@
-// import * as THREE from 'build/three.module'
+import * as THREE from 'build/three.module'
 import { 
     Scene,
     AmbientLight,
@@ -8,12 +8,15 @@ import {
     MeshBasicMaterial,
     Mesh,
     Vector3,
-    ArrowHelper
+    ArrowHelper,
+    Curve,
+    TubeGeometry,
+    CameraHelper
 
 } from 'build/three.module'
 
 // import {ArrowHelper} from 'helpers/ArrowHelper'
-// import {OrbitControls} from 'jsm/controls/OrbitControls';
+import {OrbitControls} from 'jsm/controls/OrbitControls';
 import { fromEvent } from 'rxjs'
 // import {WEBGL} from 'webgl.js'
 
@@ -37,7 +40,8 @@ const viewPort = {
         return document.documentElement.clientWidth 
     },
     get aspect() {
-        return this.width/this.height
+        // return this.width/this.height
+        return window.innerWidth / window.innerHeight
     }
 }
 
@@ -64,12 +68,13 @@ class Basic {
 
         Lab.createScene()
         Lab.addLight(0xffffff)
-        Lab.addCamera()
         Lab.addCube()
         Lab.mountRenderer()
-        // controls = new OrbitControls( camera, renderer.domElement )
+        Lab.addCamera()
+        controls = new OrbitControls( camera, renderer.domElement )
         // controls.update()
         Lab.addArrows()
+        Lab.addTube()
         
         animate = function() {        
             requestAnimationFrame( animate )
@@ -78,7 +83,7 @@ class Basic {
             cube.rotation.y += 0.01
             cube.rotation.z += 0.02
             
-            // controls.update()
+            controls.update()
         }
         animate()
         
@@ -105,12 +110,30 @@ class Basic {
     }
     addCamera() {
         camera = new PerspectiveCamera( 45, viewPort.aspect, 1, 1000 )
-        camera.position.z = 5
+        
+        // const controls = new OrbitControls( camera, renderer.domElement )
+        camera.position.z = 15
         camera.position.y = 2
         camera.position.x = 3
+        // controls.update()
         // camera.position.set( cameraPosition.x, cameraPosition.y, cameraPosition.z )
         // camera.position = cameraPosition
         scene.add(camera)
+        const helper = new THREE.CameraHelper( camera )
+        scene.add( helper )
+        
+        const light = new THREE.DirectionalLight( 0xFFFFFF );
+        const helper_ = new THREE.DirectionalLightHelper( light, 5 );
+        scene.add( helper_ )
+
+        const size = 10;
+        const divisions = 10;
+
+        const gridHelper = new THREE.GridHelper( size, divisions );
+        scene.add( gridHelper );
+
+        //camera.lookAt( 0, 0, 0 );
+        
     }
     mountRenderer() {
         const cnvs = document.getElementById('f380-sgji-38fx')
@@ -133,6 +156,38 @@ class Basic {
     addControls() {
         const controls = new OrbitControls( camera, renderer.domElement )
         controls.update()
+    }
+    addTube() {
+        class CustomSinCurve extends Curve {
+
+            constructor( scale = 1 ) {
+        
+                super();
+        
+                this.scale = scale;
+        
+            }
+        
+            getPoint( t, optionalTarget = new Vector3() ) {
+        
+                const tx = t * 3 - 1.5;
+                const ty = Math.sin( 2 * Math.PI * t );
+                const tz = 0;
+        
+                return optionalTarget.set( tx, ty, tz ).multiplyScalar( this.scale );
+        
+            }
+        
+        }        
+        const path = new CustomSinCurve( 10 );
+        const geometry = new TubeGeometry( path, 20, 1, 8, false );
+        const material = new MeshBasicMaterial( { 
+            color: 0x49ef4,
+            wireframe: true,
+            // vertexColors: true
+        });
+        const mesh = new Mesh( geometry, material );
+        scene.add( mesh );
     }
     addArrows() {
         const origin = new Vector3( 0, 0, 0 )
