@@ -107,6 +107,7 @@ class Basic {
     }
     createScene() {
         scene = new Scene()
+        scene.background = new THREE.Color( 0xf0f0f0 )
     }
     addLight(color) {
         light = new AmbientLight(color)
@@ -145,7 +146,8 @@ class Basic {
             canvas: cnvs,
             antialias: true
         })
-        renderer.setSize(viewPort.width, viewPort.height)
+        renderer.setPixelRatio( window.devicePixelRatio )
+		renderer.setSize( window.innerWidth, window.innerHeight )
     }
     
     start(func) {
