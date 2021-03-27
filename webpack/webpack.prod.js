@@ -59,6 +59,10 @@ const CSS = {
   ],
   sideEffects: true,
 }
+const JS = {
+    test: /\.js$/i,
+    use: 'raw-loader',
+}
 module.exports = merge(common, {
   mode: 'production',
   module: {

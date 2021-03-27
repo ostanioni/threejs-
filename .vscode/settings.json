@@ -47,7 +47,7 @@
   // ],
   //"eslint.workingDirectories": ["./"],
   "typescript.validate.enable": false,
-  "javascript.validate.enable": false,
+  "javascript.validate.enable": true,
   "files.exclude": {
     "**/*.js": { "when": "$(basename).ts" },
     "**/**.js": { "when": "$(basename).tsx" },

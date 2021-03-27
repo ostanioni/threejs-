@@ -83,7 +83,8 @@ module.exports = {
       scenes:     `${SRC}/src/scenes`,
       textures:   `${SRC}/src/textures`,
 
-      build:      `${SRC}/build`
+      build:      `${SRC}/build`,
+        jsm:      `${SRC}/jsm`
     }
   },
   plugins: [

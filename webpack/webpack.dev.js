@@ -6,11 +6,11 @@ const path = require('path')
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
-const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin")
+// const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default
-const TerserPlugin = require('terser-webpack-plugin')
+// const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+// const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default
+// const TerserPlugin = require('terser-webpack-plugin')
 
 
 console.clear()
@@ -39,7 +39,7 @@ const terserOptions = {
     sourceMap: true,
   },
   parallel: true,   
-  extractComments: false,
+  extractComments: true,
 }
 const miniCssOptions = {
     filename: 'css/[contenthash].css',
@@ -50,7 +50,6 @@ const cssMinimizerOptions = {
   test: /\.css$/,
   parallel: true,  
 }
-
 /***___CSS_LOADER_WITHOUT_SOURCE_MAP___***/
 const CSS = {
   test: /\.css$/,
@@ -76,15 +75,15 @@ module.exports = merge(common, {
   devtool: 'cheap-module-source-map', // 'source-map',
   plugins: [
     new MiniCssExtractPlugin(miniCssOptions),
-    new HTMLInlineCSSWebpackPlugin(),
+    // new HTMLInlineCSSWebpackPlugin(),
   ],
   optimization: {
     minimize: true,
     usedExports: true,
     minimizer: [
-      new HtmlMinimizerPlugin({ test: /\.html$/i }),
-      new CssMinimizerPlugin(cssMinimizerOptions),
-      new TerserPlugin(terserOptions)
+      // new HtmlMinimizerPlugin({ test: /\.html$/i }),
+      // new CssMinimizerPlugin(cssMinimizerOptions),
+      // new TerserPlugin(terserOptions)
     ],
   }
 })
