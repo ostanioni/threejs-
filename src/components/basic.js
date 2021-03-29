@@ -11,9 +11,12 @@ import {
     ArrowHelper,
     Curve,
     TubeGeometry,
+    MeshLambertMaterial,
+    MeshDepthMaterial,
     CameraHelper
 
 } from 'build/three.module'
+import {EventDispatcher} from 'core/EventDispatcher'
 
 // import {ArrowHelper} from 'helpers/ArrowHelper'
 import {OrbitControls} from 'jsm/controls/OrbitControls'
@@ -70,7 +73,7 @@ class Basic {
 
     constructor() {
         Lab = this
-
+    
         Lab.createScene()
         Lab.addLight(0xffffff)
         Lab.addCube()
@@ -98,13 +101,16 @@ class Basic {
 
         dragControls.addEventListener( 'dragstart', function ( event ) {
 
-	        event.object.material.emissive.set( 0xaaaaaa );
+	        orbitControls.enabled = false
+            event.object.material.emissive.set( 0xaaaaaa );
+
 
         } );
 
         dragControls.addEventListener( 'dragend', function ( event ) {
 
 	        event.object.material.emissive.set( 0x000000 );
+            orbitControls.enabled = true
 
         } );
         animate()
@@ -175,7 +181,8 @@ class Basic {
     }
     addCube() {
         const geometry = new BoxGeometry()
-        const material = new MeshBasicMaterial( { color: 0x00ff00 } )
+        const material = new THREE.MeshLambertMaterial( { color: 0xfeb74c, wireframe: true} )
+        // const material = new MeshDepthMaterial( { wireframe: true } )
         cube = new Mesh( geometry, material )
         this.sceneAdd(cube)
     }
