@@ -16,14 +16,15 @@ import {
 } from 'build/three.module'
 
 // import {ArrowHelper} from 'helpers/ArrowHelper'
-import {OrbitControls} from 'jsm/controls/OrbitControls';
+import {OrbitControls} from 'jsm/controls/OrbitControls'
+import {DragControls} from 'jsm/controls/DragControls'
 import { fromEvent } from 'rxjs'
 // import {WEBGL} from 'webgl.js'
 
 
 const log = msg => console.log(msg)
 
-let scene, camera, renderer, light, cube, controls, Lab, animate
+let scene, camera, renderer, light, cube, orbitControls, dragControls, Lab, animate
 
 let cameraPosition = {
     x:0, 
@@ -75,7 +76,7 @@ class Basic {
         Lab.addCube()
         Lab.mountRenderer()
         Lab.addCamera()
-        controls = new OrbitControls( camera, renderer.domElement )
+        orbitControls = new OrbitControls( camera, renderer.domElement )
         // controls.update()
         Lab.addArrows()
         Lab.addTube()
@@ -87,10 +88,26 @@ class Basic {
             cube.rotation.y += 0.01
             cube.rotation.z += 0.02
             
-            controls.update()
+            orbitControls.update()
         }
-        animate()
         
+
+        dragControls = new DragControls( [cube], camera, renderer.domElement );
+
+        // add event listener to highlight dragged objects
+
+        dragControls.addEventListener( 'dragstart', function ( event ) {
+
+	        event.object.material.emissive.set( 0xaaaaaa );
+
+        } );
+
+        dragControls.addEventListener( 'dragend', function ( event ) {
+
+	        event.object.material.emissive.set( 0x000000 );
+
+        } );
+        animate()
     }
 
     addPipe() {
@@ -107,7 +124,7 @@ class Basic {
     }
     createScene() {
         scene = new Scene()
-        scene.background = new THREE.Color( 0xf0f0f0 )
+        scene.background = new THREE.Color( 0x101010 )
     }
     addLight(color) {
         light = new AmbientLight(color)
