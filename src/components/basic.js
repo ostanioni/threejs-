@@ -11,6 +11,7 @@ import {
     ArrowHelper,
     Curve,
     TubeGeometry,
+    GridHelper,
     MeshLambertMaterial,
     MeshDepthMaterial,
     CameraHelper
@@ -83,6 +84,7 @@ class Basic {
         // controls.update()
         Lab.addArrows()
         Lab.addTube()
+        Lab.addGrid()
         
         animate = function() {        
             requestAnimationFrame( animate )
@@ -171,8 +173,7 @@ class Basic {
         })
         renderer.setPixelRatio( window.devicePixelRatio )
 		renderer.setSize( window.innerWidth, window.innerHeight )
-    }
-    
+    }    
     start(func) {
         requestAnimationFrame( func )
     }
@@ -241,6 +242,10 @@ class Basic {
         const blue = 0x0000ff
         const arrowHelperZ = new ArrowHelper( dirZ, origin, length, blue )
         scene.add( arrowHelperZ )
+    }
+    addGrid() {
+        const gridHelper = new GridHelper( 1000, 3 )
+		scene.add( gridHelper )
     }
 }
 export {Basic}
