@@ -12,9 +12,7 @@ import {
     Curve,
     TubeGeometry,
     GridHelper,
-    MeshLambertMaterial,
-    MeshDepthMaterial,
-    CameraHelper
+    MeshLambertMaterial,    
 
 } from 'build/three.module'
 import {EventDispatcher} from 'core/EventDispatcher'
@@ -29,6 +27,9 @@ import { fromEvent } from 'rxjs'
 const log = msg => console.log(msg)
 
 let scene, camera, renderer, light, cube, orbitControls, dragControls, Lab, animate
+
+const Pipes = []
+const Tees = []
 
 let cameraPosition = {
     x:0, 
@@ -78,11 +79,12 @@ class Basic {
         Lab.createScene()
         Lab.addLight(0xffffff)
         Lab.addCube()
+        Lab.addPipe()
         Lab.mountRenderer()
         Lab.addCamera()
         orbitControls = new OrbitControls( camera, renderer.domElement )
         // controls.update()
-        Lab.addArrows()
+        Lab.addAxis()
         Lab.addTube()
         Lab.addGrid()
         
@@ -97,7 +99,7 @@ class Basic {
         }
         
 
-        dragControls = new DragControls( [cube], camera, renderer.domElement );
+        dragControls = new DragControls( [cube, ...Pipes], camera, renderer.domElement );
 
         // add event listener to highlight dragged objects
 
@@ -119,7 +121,11 @@ class Basic {
     }
 
     addPipe() {
-
+        var cylGeometry = new THREE.CylinderGeometry( 5, 5, 20, 32 );
+        var cylMaterial = new THREE.MeshLambertMaterial( {color: 0xffff00} )
+        var cylinder = new THREE.Mesh( cylGeometry, cylMaterial );
+        Pipes.push( cylinder )
+        scene.add( cylinder );
     }
     addTees() {
 
@@ -148,21 +154,18 @@ class Basic {
         // controls.update()
         // camera.position.set( cameraPosition.x, cameraPosition.y, cameraPosition.z )
         // camera.position = cameraPosition
+         /*
         scene.add(camera)
         const helper = new THREE.CameraHelper( camera )
         scene.add( helper )
-        
+       
         const light = new THREE.DirectionalLight( 0xFFFFFF );
         const helper_ = new THREE.DirectionalLightHelper( light, 5 );
         scene.add( helper_ )
+        */
+        
 
-        const size = 10;
-        const divisions = 10;
-
-        const gridHelper = new THREE.GridHelper( size, divisions );
-        scene.add( gridHelper );
-
-        //camera.lookAt( 0, 0, 0 );
+        camera.lookAt( 0, 0, 0 );
         
     }
     mountRenderer() {
@@ -174,12 +177,6 @@ class Basic {
         renderer.setPixelRatio( window.devicePixelRatio )
 		renderer.setSize( window.innerWidth, window.innerHeight )
     }    
-    start(func) {
-        requestAnimationFrame( func )
-    }
-    sceneAdd(mesh) {
-        scene.add(mesh)
-    }
     addCube() {
         const geometry = new BoxGeometry()
         const material = new THREE.MeshLambertMaterial( { color: 0xfeb74c, wireframe: true} )
@@ -187,9 +184,16 @@ class Basic {
         cube = new Mesh( geometry, material )
         this.sceneAdd(cube)
     }
+    sceneAdd(mesh) {
+        scene.add(mesh)
+    }
     addControls() {
         const controls = new OrbitControls( camera, renderer.domElement )
         controls.update()
+    }
+    createScene() {
+        scene = new Scene()
+        scene.background = new THREE.Color( 0x101010 )
     }
     addTube() {
         class CustomSinCurve extends Curve {
@@ -223,28 +227,28 @@ class Basic {
         const mesh = new Mesh( geometry, material );
         scene.add( mesh );
     }
-    addArrows() {
+    addAxis() {
         const origin = new Vector3( 0, 0, 0 )
         const length = 10
 
-        const dirX = new Vector3( 10, 0, 0 )
+        const dirX = new Vector3( 100, 0, 0 )
         const red = 0xff0000
         const arrowHelperX = new ArrowHelper( dirX, origin, length, red )
         scene.add( arrowHelperX )
 
-        const dirY = new Vector3( 0, 10, 0 )
+        const dirY = new Vector3( 0, 100, 0 )
         const green = 0x00ff00
         const arrowHelperY = new ArrowHelper( dirY, origin, length, green )
         scene.add( arrowHelperY )
         
         
-        const dirZ = new Vector3( 0, 0, 10 )
+        const dirZ = new Vector3( 0, 0, 100 )
         const blue = 0x0000ff
         const arrowHelperZ = new ArrowHelper( dirZ, origin, length, blue )
         scene.add( arrowHelperZ )
     }
     addGrid() {
-        const gridHelper = new GridHelper( 1000, 3 )
+        const gridHelper = new GridHelper( 100, 50 )
 		scene.add( gridHelper )
     }
 }
