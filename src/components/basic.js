@@ -26,7 +26,7 @@ import { fromEvent } from 'rxjs'
 
 const log = msg => console.log(msg)
 
-let scene, camera, renderer, light, cube, orbitControls, dragControls, Lab, animate
+let scene, camera, renderer, light, cube, orbitControls, dragControls, Lab, animate, cylinder
 
 const Pipes = []
 const Tees = []
@@ -107,6 +107,8 @@ class Basic {
 
 	        orbitControls.enabled = false
             event.object.material.emissive.set( 0xaaaaaa );
+            cylinder.geometry.computeBoundingBox()
+            console.log(cylinder)
 
 
         } );
@@ -121,9 +123,27 @@ class Basic {
     }
 
     addPipe() {
-        var cylGeometry = new THREE.CylinderGeometry( 5, 5, 20, 32 );
-        var cylMaterial = new THREE.MeshLambertMaterial( {color: 0xffff00} )
-        var cylinder = new THREE.Mesh( cylGeometry, cylMaterial );
+        let opt = {
+            radiusTop: 5,
+            radiusBottom: 5,
+            heigt: 20,
+            radiusSegments: 10,
+            heightSegments: 10,
+            openEnded: true,
+            // thetaStart: 0,
+            // thetaLength: 2*pi
+        }
+        // THREE.CylinderBufferGeometry
+        var cylGeometry = new THREE.CylinderGeometry( 5,5,20,10,10,true, 0 );
+        var cylMaterial = new THREE.MeshLambertMaterial( {
+            color: 0xffff00, 
+            wireframe: true,
+            skinning: true        
+        } )
+        cylinder = new THREE.Mesh( cylGeometry, cylMaterial );
+        cylinder.openEnded = false
+        cylinder.rotateX(2)
+        
         Pipes.push( cylinder )
         scene.add( cylinder );
     }
